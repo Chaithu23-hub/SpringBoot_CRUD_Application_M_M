@@ -28,6 +28,8 @@ public class Developer {
     @JsonIgnoreProperties("projects")
     private Set<Project> projects;
 
+    
+
 
 
 }
