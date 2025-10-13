@@ -2,10 +2,7 @@ package com.manytomany.testingmanytomany.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -15,6 +12,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Developer {
 
     @Id
@@ -24,8 +22,12 @@ public class Developer {
     private String name;
 
 
-    @ManyToMany(mappedBy = "developers",fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("projects")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "developer_project_table",
+            joinColumns = @JoinColumn(name = "developer_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id")
+    )
+    @JsonIgnoreProperties("developers")
     private Set<Project> projects;
 
 }

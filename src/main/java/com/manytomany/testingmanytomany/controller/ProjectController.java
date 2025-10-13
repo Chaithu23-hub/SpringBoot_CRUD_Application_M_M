@@ -2,7 +2,6 @@ package com.manytomany.testingmanytomany.controller;
 
 import com.manytomany.testingmanytomany.entity.Project;
 import com.manytomany.testingmanytomany.service.ProjectService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,36 +19,30 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<List<Project>> getAllProjects() {
-        List<Project> projects = projectService.getAllProjects();
-        return new ResponseEntity<>(projects, HttpStatus.OK);
+        return ResponseEntity.ok(projectService.getAllProjects());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable Long id) {
-        Project project = projectService.getProjectById(id);
-        return new ResponseEntity<>(project, HttpStatus.OK);
+        return ResponseEntity.ok(projectService.getProjectById(id));
     }
 
     @PostMapping
     public ResponseEntity<Project> createProject(@RequestBody Project project) {
-        Project savedProject = projectService.saveProject(project);
-        return new ResponseEntity<>(savedProject, HttpStatus.CREATED);
+        Project created = projectService.saveProject(project);
+        return ResponseEntity.status(201).body(created);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails) {
-        Project existingProject = projectService.getProjectById(id);
-
-        existingProject.setProjectTitle(projectDetails.getProjectTitle());
-
-        Project updatedProject = projectService.saveProject(existingProject);
-        return new ResponseEntity<>(updatedProject, HttpStatus.OK);
+        Project updatedProject = projectService.updateProject(id, projectDetails);
+        return ResponseEntity.ok(updatedProject);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }
-
