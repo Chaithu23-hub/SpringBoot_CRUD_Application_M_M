@@ -1,7 +1,7 @@
 package com.manytomany.testingmanytomany.controller;
 
 import com.manytomany.testingmanytomany.dto.ProjectDTO;
-import com.manytomany.testingmanytomany.service.ProjectService;
+
 import com.manytomany.testingmanytomany.service.ProjectServiceInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +43,8 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, @RequestBody ProjectDTO projectDTO) {
-        ProjectDTO updated = projectServiceInterface.updateProject(id, projectDTO);
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long projectId, @RequestBody ProjectDTO projectDTO) {
+        ProjectDTO updated = projectServiceInterface.updateProject(projectId, projectDTO);
         return ResponseEntity.ok(updated);
     }
 

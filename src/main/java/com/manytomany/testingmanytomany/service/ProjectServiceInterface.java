@@ -2,8 +2,10 @@ package com.manytomany.testingmanytomany.service;
 
 import com.manytomany.testingmanytomany.dto.ProjectDTO;
 import com.manytomany.testingmanytomany.entity.Project;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 public interface ProjectServiceInterface {
     List<ProjectDTO> getAllProjectsDTOs();
@@ -11,7 +13,7 @@ public interface ProjectServiceInterface {
     Project fromProjectDTO(ProjectDTO dto);
     ProjectDTO toProjectDTO(Project project);
     ProjectDTO getProjectDTOById(Long id);
-    Project updateProject(Long projectId, ProjectDTO projectDTO);
+    ProjectDTO updateProject(Long projectId, ProjectDTO projectDTO);
     Project saveProject(Project project);
     void deleteProject(Long id);
 

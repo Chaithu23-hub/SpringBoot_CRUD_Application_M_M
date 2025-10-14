@@ -1,6 +1,7 @@
 package com.manytomany.testingmanytomany.service;
 
 import com.manytomany.testingmanytomany.entity.Developer;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

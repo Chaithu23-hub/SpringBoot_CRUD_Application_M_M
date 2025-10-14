@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class ProjectService {
-
+public class ProjectService implements ProjectServiceInterface{
     private final ProjectRepository projectRepository;
     private final DeveloperRepository developerRepository;
 
@@ -26,7 +25,7 @@ public class ProjectService {
         this.developerRepository = developerRepository;
     }
 
-    public List<ProjectDTO> getAllProjectDTOs() {
+    public List<ProjectDTO> getAllProjectsDTOs() {
         List<Project> projects = projectRepository.findAllWithDevelopers();
         return projects.stream()
                 .map(this::toProjectDTO)
@@ -69,7 +68,7 @@ public class ProjectService {
         return project;
     }
 
-
+    
     public ProjectDTO updateProject(Long projectId, ProjectDTO projectDTO) {
         Project existingProject = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
@@ -86,7 +85,7 @@ public class ProjectService {
         return toProjectDTO(updatedProject);
     }
 
-    
+
 
     public Project saveProject(Project project) {
         return projectRepository.save(project);
