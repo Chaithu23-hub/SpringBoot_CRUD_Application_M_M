@@ -1,12 +1,10 @@
 package com.manytomany.testingmanytomany.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
 
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "projects_table")
@@ -14,7 +12,6 @@ import static jakarta.persistence.CascadeType.ALL;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Project {
 
     @Id
@@ -22,8 +19,12 @@ public class Project {
     private Long id;
 
     private String projectTitle;
-    @ManyToMany(mappedBy = "projects",cascade = ALL)
-    @JsonIgnoreProperties("projects")
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "developer_project_table",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "developer_id")
+    )
     private Set<Developer> developers;
 
 }

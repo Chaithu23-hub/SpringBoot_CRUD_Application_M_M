@@ -1,48 +1,56 @@
 package com.manytomany.testingmanytomany.controller;
 
-import com.manytomany.testingmanytomany.entity.Project;
+import com.manytomany.testingmanytomany.dto.ProjectDTO;
 import com.manytomany.testingmanytomany.service.ProjectService;
+import com.manytomany.testingmanytomany.service.ProjectServiceInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
 
-    private final ProjectService projectService;
+    private final ProjectServiceInterface projectServiceInterface;
 
-    public ProjectController(ProjectService projectService) {
-        this.projectService = projectService;
+    public ProjectController(ProjectServiceInterface projectServiceInterface) {
+        this.projectServiceInterface = projectServiceInterface;
     }
 
     @GetMapping
-    public ResponseEntity<List<Project>> getAllProjects() {
-        return ResponseEntity.ok(projectService.getAllProjects());
+    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
+        return ResponseEntity.ok(projectServiceInterface.getAllProjectsDTOs());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProjectById(@PathVariable Long id) {
-        return ResponseEntity.ok(projectService.getProjectById(id));
+    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Long id) {
+        return ResponseEntity.ok(projectServiceInterface.getProjectDTOById(id));
+    }
+    @GetMapping("/by-developer/{developerId}")
+    public ResponseEntity<List<ProjectDTO>> getProjectsByDeveloperId(@PathVariable Long developerId) {
+        List<ProjectDTO> projectDTOs = projectServiceInterface.getProjectsByDeveloperId(developerId);
+        return ResponseEntity.ok(projectDTOs);
     }
 
     @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
-        Project created = projectService.saveProject(project);
-        return ResponseEntity.status(201).body(created);
+    public ResponseEntity<ProjectDTO> createProject(@RequestBody ProjectDTO projectDTO) {
+        ProjectDTO saved = projectServiceInterface.toProjectDTO(
+                projectServiceInterface.saveProject(projectServiceInterface.fromProjectDTO(projectDTO))
+        );
+        return ResponseEntity.status(201).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails) {
-        Project updatedProject = projectService.updateProject(id, projectDetails);
-        return ResponseEntity.ok(updatedProject);
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, @RequestBody ProjectDTO projectDTO) {
+        ProjectDTO updated = projectServiceInterface.updateProject(id, projectDTO);
+        return ResponseEntity.ok(updated);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
-        projectService.deleteProject(id);
+        projectServiceInterface.deleteProject(id);
         return ResponseEntity.noContent().build();
     }
 }

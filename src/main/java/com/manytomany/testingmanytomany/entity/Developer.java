@@ -1,6 +1,8 @@
 package com.manytomany.testingmanytomany.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +14,6 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Developer {
 
     @Id
@@ -21,13 +22,5 @@ public class Developer {
 
     private String name;
 
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "developer_project_table",
-            joinColumns = @JoinColumn(name = "developer_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id")
-    )
-    @JsonIgnoreProperties("developers")
-    private Set<Project> projects;
 
 }

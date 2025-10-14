@@ -2,6 +2,7 @@ package com.manytomany.testingmanytomany.controller;
 
 import com.manytomany.testingmanytomany.entity.Developer;
 import com.manytomany.testingmanytomany.service.DeveloperService;
+import com.manytomany.testingmanytomany.service.DeveloperServiceInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,37 +12,38 @@ import java.util.List;
 @RequestMapping("/api/developers")
 public class DeveloperController {
 
-    private final DeveloperService developerService;
+    private final DeveloperServiceInterface developerServiceInterface;
 
-    public DeveloperController(DeveloperService developerService) {
-        this.developerService = developerService;
+    public DeveloperController(DeveloperServiceInterface developerServiceInterface) {
+        this.developerServiceInterface = developerServiceInterface;
     }
 
     @GetMapping
     public ResponseEntity<List<Developer>> getAllDevelopers() {
-        return ResponseEntity.ok(developerService.getAllDevelopers());
+        return ResponseEntity.ok(developerServiceInterface.getAllDevelopers());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Developer> getDeveloperById(@PathVariable Long id) {
-        return ResponseEntity.ok(developerService.getDeveloperById(id));
+        return ResponseEntity.ok(developerServiceInterface.getDeveloperById(id));
     }
 
     @PostMapping
     public ResponseEntity<Developer> createDeveloper(@RequestBody Developer developer) {
-        Developer created = developerService.saveDeveloper(developer);
-        return ResponseEntity.status(201).body(created);
+        Developer saved = developerServiceInterface.saveDeveloper(developer);
+        return ResponseEntity.status(201).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Developer> updateDeveloper(@PathVariable Long id, @RequestBody Developer developerDetails) {
-        Developer updatedDeveloper=developerService.updateDeveloper(id, developerDetails);
-        return ResponseEntity.ok(updatedDeveloper);
+    public ResponseEntity<Developer> updateDeveloper(@PathVariable Long id, @RequestBody Developer developer) {
+        developer.setId(id);
+        Developer updated = developerServiceInterface.saveDeveloper(developer);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDeveloper(@PathVariable Long id) {
-        developerService.deleteDeveloper(id);
+        developerServiceInterface.deleteDeveloper(id);
         return ResponseEntity.noContent().build();
     }
 }
