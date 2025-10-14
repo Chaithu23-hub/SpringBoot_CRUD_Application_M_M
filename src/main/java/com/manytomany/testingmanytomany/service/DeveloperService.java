@@ -1,16 +1,12 @@
 package com.manytomany.testingmanytomany.service;
 
 import com.manytomany.testingmanytomany.entity.Developer;
-import com.manytomany.testingmanytomany.entity.Project;
 import com.manytomany.testingmanytomany.exception.DeveloperNotFoundException;
-import com.manytomany.testingmanytomany.exception.ProjectNotFoundException;
 import com.manytomany.testingmanytomany.repository.DeveloperRepository;
-import com.manytomany.testingmanytomany.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 @Service
 public class DeveloperService implements DeveloperServiceInterface{
 
@@ -20,8 +16,8 @@ public class DeveloperService implements DeveloperServiceInterface{
         this.developerRepository = developerRepository;
     }
 
-    public List<Developer> getAllDevelopers() {
-        return developerRepository.findAll();
+    public List<Developer> getAllDevelopers(Pageable pageable) {
+        return developerRepository.findAll(pageable).getContent();
     }
 
     public Developer getDeveloperById(Long id) {

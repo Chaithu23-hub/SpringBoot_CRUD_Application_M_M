@@ -68,7 +68,7 @@ public class ProjectService implements ProjectServiceInterface{
         return project;
     }
 
-    
+
     public ProjectDTO updateProject(Long projectId, ProjectDTO projectDTO) {
         Project existingProject = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found"));

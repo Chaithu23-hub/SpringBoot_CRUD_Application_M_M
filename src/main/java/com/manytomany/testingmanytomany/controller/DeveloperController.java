@@ -3,8 +3,12 @@ package com.manytomany.testingmanytomany.controller;
 import com.manytomany.testingmanytomany.entity.Developer;
 import com.manytomany.testingmanytomany.service.DeveloperService;
 import com.manytomany.testingmanytomany.service.DeveloperServiceInterface;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -19,9 +23,13 @@ public class DeveloperController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Developer>> getAllDevelopers() {
-        return ResponseEntity.ok(developerServiceInterface.getAllDevelopers());
+    public ResponseEntity<List<Developer>> getAllDevelopers(
+            @RequestParam int pageNo,
+            @RequestParam int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return ResponseEntity.ok(developerServiceInterface.getAllDevelopers(pageable));
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Developer> getDeveloperById(@PathVariable Long id) {
