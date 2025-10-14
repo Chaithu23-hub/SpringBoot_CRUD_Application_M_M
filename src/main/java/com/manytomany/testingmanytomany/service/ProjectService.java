@@ -31,13 +31,15 @@ public class ProjectService implements ProjectServiceInterface{
    public Project getProjectById(Long id){
         return projectRepository.findById(id).orElseThrow(()->new ProjectNotFoundException("No projects found"));
     }
+    //From here we are updating or makinmg relationship with developers and assigning them by checking whether are they are available
     public Project updateProject(Long projectId, Project projectDetails) {
+        //finding project details by id
         Project existingProject = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
-
+        //updateing project deatails like project Title
         existingProject.setProjectTitle(projectDetails.getProjectTitle());
 
-        // Fetch managed developers from DB
+        // Fetching  managed developers from DB
         Set<Developer> managedDevelopers = new HashSet<>();
         if (projectDetails.getDevelopers() != null) {
             for (Developer dev : projectDetails.getDevelopers()) {
@@ -47,10 +49,10 @@ public class ProjectService implements ProjectServiceInterface{
             }
         }
 
-        // Set developers in project
+        // Setting  developers into  project
         existingProject.setDevelopers(managedDevelopers);
 
-        // Keep bidirectional relationship consistent
+        // Keep bidirectional relationship consistent and we update
         for (Developer dev : managedDevelopers) {
             dev.getProjects().add(existingProject);
         }
